@@ -20,7 +20,6 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
         $message = "Pendaftaran Berhasil";
-        $user = request()->user;
         return response()->json($message, 201);
     }
     public function update(Request $request, User $user)
