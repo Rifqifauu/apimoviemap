@@ -7,7 +7,7 @@ use App\Http\Controllers\ReviewController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register',[UserController::class, 'store']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 Route::group(['prefix' => 'reviews'], function () {
     Route::post('/', [ReviewController::class, 'store']);
