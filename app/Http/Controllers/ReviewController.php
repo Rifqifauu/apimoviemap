@@ -15,21 +15,8 @@ class ReviewController extends Controller
             'rating' => 'required',
             'comment' => 'nullable|string',
         ]);
-
-        $existingReview = Review::where('user_id', $request->user_id)
-                            ->where('film_id', $request->film_id)
-                            ->first();
-
-    if ($existingReview) {
-        return response()->json([
-            'message' => 'You can only leave one review per film.',
-            'hasExistingReview' => true,
-        ], 422);
-    } else{
         $review = Review::create($request->all());
         return response()->json($review, 201);
-    }
-        
     }
 
     public function show($id)
@@ -39,6 +26,8 @@ class ReviewController extends Controller
         $query->select('id', 'name');  // Ambil hanya id dan name dari tabel users
     }])
     ->get();
+
+
 
         // Jika tidak ditemukan, kembalikan respons error
         if (!$review) {
