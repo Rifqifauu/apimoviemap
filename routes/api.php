@@ -16,3 +16,20 @@ Route::group(['prefix' => 'reviews'], function () {
     Route::put('/{id}', [ReviewController::class, 'update']);
     Route::delete('/{id}', [ReviewController::class, 'destroy']);
 });
+use App\Http\Controllers\WatchlistController;
+
+Route::prefix('watchlists')->group(function () {
+    // Menampilkan semua watchlist milik user tertentu
+    Route::get('/{user_id}', [WatchlistController::class, 'index'])->name('watchlists.index');
+
+    // Menambah item ke watchlist
+    Route::post('/', [WatchlistController::class, 'store'])->name('watchlists.store');
+
+    // Mengedit item di watchlist berdasarkan ID item
+    Route::put('/{id}', [WatchlistController::class, 'update'])->name('watchlists.update');
+
+    // Menghapus item dari watchlist berdasarkan ID item
+    Route::delete('/{user_id}/{film_id}', [WatchlistController::class, 'destroy'])->name('watchlists.destroy');
+});
+
+

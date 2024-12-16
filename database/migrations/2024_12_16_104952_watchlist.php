@@ -4,20 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('review', function (Blueprint $table) {
+        Schema::create('watchlist', function (Blueprint $table) {
             $table->id();
-            $table->string('film_id')->unique();
             $table->unsignedBigInteger('user_id');
-            $table->integer('rating');
-            $table->string('comment');
+            $table->string('film_id'); // Nama item dalam watchlist
             $table->timestamps();
+
+            // Foreign key ke tabel users
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -26,7 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('review');
-
+        Schema::dropIfExists('watchlist');
     }
 };
