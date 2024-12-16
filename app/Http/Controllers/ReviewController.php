@@ -21,12 +21,23 @@ class ReviewController extends Controller
 
     public function show($id)
     {
-        $review = Review::find($id);
+        $review = Review::where('film_id', $id)
+    ->with(['user' => function($query) {
+        $query->select('id', 'name');  // Ambil hanya id dan name dari tabel users
+    }])
+    ->get();
+
+
+
+        // Jika tidak ditemukan, kembalikan respons error
         if (!$review) {
             return response()->json(['error' => 'Review tidak ditemukan'], 404);
         }
+    
+        // Kembalikan data review sebagai JSON
         return response()->json($review);
     }
+    
 
     public function update(Request $request, $id)
     {
