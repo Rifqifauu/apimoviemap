@@ -34,16 +34,23 @@ class WatchlistController extends Controller
             'film_id' => 'required|integer',
         ]);
         
-
+        $existingWatchlist = Watchlist::where('user_id', $request->user_id)
+        ->where('film_id', $request->film_id)
+        ->first();
+        if ($existingWatchlist) {
+            return response()-> json([
+                'message' => 'This film already exists in your watchlist',
+                'hasExistingWatchlist' => true,
+            ], 422);
+        } else{
         $watchlist = Watchlist::create([
             'user_id' => $validatedData['user_id'],
             'film_id' => $validatedData['film_id'],
-'created_at' => now(), // Waktu sekarang
-    'updated_at' => now(),        ]);
-
+           ]);
         return response()->json(['message' => 'Watchlist item created', 'data' => $watchlist], 201);
+        }
     }
-
+    
     // Mengedit item di watchlist
     public function update(Request $request, $id)
     {
