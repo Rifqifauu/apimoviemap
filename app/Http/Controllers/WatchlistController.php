@@ -37,7 +37,6 @@ class WatchlistController extends Controller
         $existingWatchlist = Watchlist::where('user_id', $request->user_id)
         ->where('film_id', $request->film_id)
         ->first();
-<<<<<<< HEAD
 
 if ($existingWatchlist) {
 return response()->json([
@@ -48,22 +47,9 @@ return response()->json([
 $review = Watchlist::create($request->all());
 return response()->json($review, 201);
 }
-=======
-        if ($existingWatchlist) {
-            return response()-> json([
-                'message' => 'This film already exists in your watchlist',
-                'hasExistingWatchlist' => true,
-            ], 422);
-        } else{
-        $watchlist = Watchlist::create([
-            'user_id' => $validatedData['user_id'],
-            'film_id' => $validatedData['film_id'],
-           ]);
-        return response()->json(['message' => 'Watchlist item created', 'data' => $watchlist], 201);
-        }
->>>>>>> 09fc9fe35891bb458b70a70eda3b88f1969d5681
     }
-    
+
+
     // Mengedit item di watchlist
     public function update(Request $request, $id)
     {

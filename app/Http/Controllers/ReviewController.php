@@ -78,4 +78,33 @@ class ReviewController extends Controller
         $review->delete();
         return response()->json(['message' => 'Review berhasil dihapus']);
     }
+
+    public function getReviewsByUser($user_id)
+{
+    $reviews = Review::where('user_id', $user_id)
+        ->with('user:id,name') // Join ke tabel user untuk mendapatkan nama user
+        ->get();
+
+    return response()->json($reviews);
+}
+
+public function getUserReviews($userId)
+{
+    // Ambil semua review berdasarkan user_id
+    $reviews = Review::where('user_id', $userId)
+        ->with(['user' => function ($query) {
+            $query->select('id', 'name'); // Ambil hanya id dan name user
+        }])
+        ->get();
+
+    // Jika review tidak ditemukan
+    if ($reviews->isEmpty()) {
+        return response()->json(['message' => 'No reviews found for this user'], 404);
+    }
+
+    // Kembalikan data review sebagai JSON
+    return response()->json($reviews);
+}
+
+
 }

@@ -22,15 +22,30 @@ class UserController extends Controller
         return response()->json($message, 201);
     }
     public function update(Request $request, User $user)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'required',
-        ]);
+{
+    // Validasi input termasuk location dan bio
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'password' => 'sometimes|nullable|min:6',
+        'location' => 'nullable|string|max:255',
+        'bio' => 'nullable|string|max:255',
+    ]);
 
-        $user->update($request->all());
-        $message = 'Profil Berhasil Diubah';
-        return response()->json(data: $message);
-    }
+    // Perbarui data user
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $request->password ? bcrypt($request->password) : $user->password,
+        'location' => $request->location,
+        'bio' => $request->bio,
+    ]);
+
+    // Kembalikan data terbaru user
+    return response()->json([
+        'message' => 'Profil Berhasil Diubah',
+        'user' => $user  // Kirim kembali data terbaru ke frontend
+    ], 200);
+}
+
 }
