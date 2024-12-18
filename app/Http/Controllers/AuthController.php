@@ -23,6 +23,8 @@ class AuthController extends Controller{
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'location' => $user->location,
+                    'bio' => $user->bio,
                 ],
             ]);
         } catch (\Exception $e) {
