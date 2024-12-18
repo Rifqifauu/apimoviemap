@@ -34,14 +34,19 @@ class WatchlistController extends Controller
             'film_id' => 'required|integer',
         ]);
         
+        $existingWatchlist = Watchlist::where('user_id', $request->user_id)
+        ->where('film_id', $request->film_id)
+        ->first();
 
-        $watchlist = Watchlist::create([
-            'user_id' => $validatedData['user_id'],
-            'film_id' => $validatedData['film_id'],
-'created_at' => now(), // Waktu sekarang
-    'updated_at' => now(),        ]);
-
-        return response()->json(['message' => 'Watchlist item created', 'data' => $watchlist], 201);
+if ($existingWatchlist) {
+return response()->json([
+'message' => 'You can only leave one review per film.',
+'hasExistingWatchlist' => true,
+], 422);
+} else{
+$review = Watchlist::create($request->all());
+return response()->json($review, 201);
+}
     }
 
     // Mengedit item di watchlist
